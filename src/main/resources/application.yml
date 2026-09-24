@@ -11,3 +11,9 @@ management:
     web:
       exposure:
         include: health,metrics
+
+llm:
+  active-provider: openai
+  fallback-provider: internal
+  timeout: 1s
+  max-attempts: 2
