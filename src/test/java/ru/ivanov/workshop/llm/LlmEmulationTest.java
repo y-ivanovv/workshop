@@ -2,11 +2,32 @@ package ru.ivanov.workshop.llm;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
 import ru.ivanov.workshop.domain.AppealCategory;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.util.concurrent.CancellationException;
+import java.util.stream.Stream;
 
 class LlmEmulationTest {
+
+    @ParameterizedTest
+    @MethodSource("providers")
+    void respectsInterruption(LlmClient client) {
+        try {
+            Thread.currentThread().interrupt();
+            assertThrows(CancellationException.class,
+                    () -> client.generate(new LlmRequest("Классифицируй обращение", "Карта")));
+        } finally {
+            Thread.interrupted();
+        }
+    }
+
+    static Stream<LlmClient> providers() {
+        return Stream.of(new OpenAiLlmClient(), new InternalLlmClient());
+    }
 
     @ParameterizedTest
     @CsvSource(delimiter = '|', value = {

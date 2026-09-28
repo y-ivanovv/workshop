@@ -5,6 +5,7 @@ import ru.ivanov.workshop.domain.AppealCategory;
 
 import java.util.Locale;
 import java.util.Set;
+import java.util.concurrent.CancellationException;
 
 /** Локальная эмуляция: запросы в OpenAI не отправляются, API-ключ не нужен. */
 @Component
@@ -37,6 +38,9 @@ public class OpenAiLlmClient implements LlmClient {
 
         // Проверяем целые слова: «картина» и «переводчик» не являются ключевыми словами.
         for (String word : request.text().toLowerCase(Locale.ROOT).split("[^\\p{L}\\p{N}_]+")) {
+            if (Thread.currentThread().isInterrupted()) {
+                throw new CancellationException("Вызов LLM прерван");
+            }
             credits = credits || CREDIT_WORDS.contains(word);
             cards = cards || CARD_WORDS.contains(word);
             transfers = transfers || TRANSFER_WORDS.contains(word);

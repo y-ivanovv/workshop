@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 import ru.ivanov.workshop.domain.AppealCategory;
 
 import java.util.Locale;
+import java.util.concurrent.CancellationException;
 
 /** Независимая локальная заглушка с тремя базовыми ключевыми словами. */
 @Component
@@ -21,6 +22,9 @@ public class InternalLlmClient implements LlmClient {
         boolean transfers = false;
 
         for (String word : request.text().toLowerCase(Locale.ROOT).split("[^\\p{L}\\p{N}_]+")) {
+            if (Thread.currentThread().isInterrupted()) {
+                throw new CancellationException("Вызов LLM прерван");
+            }
             switch (word) {
                 case "кредит" -> credits = true;
                 case "карта" -> cards = true;
