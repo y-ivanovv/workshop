@@ -6,6 +6,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageNotWritableException;
@@ -13,6 +14,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.json.JsonCompareMode;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.ivanov.workshop.domain.AppealCategory;
+import ru.ivanov.workshop.config.JsonConfiguration;
 import ru.ivanov.workshop.dto.ClassifyAppealRequest;
 import ru.ivanov.workshop.llm.ClassificationUnavailableException;
 import ru.ivanov.workshop.service.AppealClassificationService;
@@ -29,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(AppealController.class)
+@Import(JsonConfiguration.class)
 class AppealControllerTest {
 
     private static final String URL = "/api/appeals/classify";
@@ -58,7 +61,8 @@ class AppealControllerTest {
     @ParameterizedTest
     @ValueSource(strings = {
             "{}", "{\"text\":null}", "{\"text\":\"\"}", "{\"text\":\"   \"}",
-            "{\"text\":\"\\t\\n\"}", "{", "null", "{\"text\":[]}"
+            "{\"text\":\"\\t\\n\"}", "{", "null", "{\"text\":[]}", "",
+            "{\"text\":{}}", "{\"text\":123}", "{\"text\":1.5}", "{\"text\":true}"
     })
     void rejectsInvalidBodyBeforeCallingService(String json) throws Exception {
         mockMvc.perform(post(URL).contentType(MediaType.APPLICATION_JSON).content(json))
@@ -112,6 +116,17 @@ class AppealControllerTest {
         mockMvc.perform(post(URL).contentType(MediaType.TEXT_PLAIN).content("Нужна карта"))
                 .andExpect(status().isUnsupportedMediaType())
                 .andExpect(jsonPath("$.code").value("UNSUPPORTED_MEDIA_TYPE"));
+
+        verifyNoInteractions(service);
+    }
+
+    @Test
+    void rejectsUnsupportedResponseFormat() throws Exception {
+        mockMvc.perform(post(URL).contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_XML).content("{\"text\":\"Нужна карта\"}"))
+                .andExpect(status().isNotAcceptable())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value("NOT_ACCEPTABLE"));
 
         verifyNoInteractions(service);
     }

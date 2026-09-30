@@ -3,6 +3,7 @@ package ru.ivanov.workshop.controller;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -34,18 +35,23 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         };
 
         // Сохраняем HTTP-статус и служебные заголовки Spring, например Allow для 405.
-        return super.handleExceptionInternal(exception, error, headers, status, request);
+        var responseHeaders = new HttpHeaders();
+        responseHeaders.putAll(headers);
+        responseHeaders.setContentType(MediaType.APPLICATION_JSON);
+        return super.handleExceptionInternal(exception, error, responseHeaders, status, request);
     }
 
     @ExceptionHandler(ClassificationUnavailableException.class)
     public ResponseEntity<ApiError> handleUnavailable() {
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(new ApiError("CLASSIFICATION_UNAVAILABLE", "Классификация временно недоступна"));
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleUnexpected() {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(new ApiError("INTERNAL_ERROR", "Внутренняя ошибка приложения"));
     }
 }

@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.system.CapturedOutput;
@@ -84,14 +85,15 @@ class AiGatewayTest {
         assertEquals(0, fallbacks());
     }
 
-    @Test
-    void usesReserveOnceAfterExhaustingPrimaryAttempts() {
+    @ParameterizedTest
+    @ValueSource(ints = {1, 2, 3})
+    void usesReserveOnceAfterExhaustingPrimaryAttempts(int maxAttempts) {
         when(primary.generate(request)).thenThrow(new TemporaryLlmException("Временный сбой"));
         when(reserve.generate(request)).thenReturn(response);
-        assertSame(response, gateway().generate(request));
-        verify(primary, times(2)).generate(request);
+        assertSame(response, gateway(Duration.ofSeconds(2), maxAttempts).generate(request));
+        verify(primary, times(maxAttempts)).generate(request);
         verify(reserve).generate(request);
-        assertEquals(2, calls("openai", "temporary_error"));
+        assertEquals(maxAttempts, calls("openai", "temporary_error"));
         assertEquals(1, calls("internal", "success"));
         assertEquals(1, fallbacks());
     }
@@ -121,15 +123,24 @@ class AiGatewayTest {
         return Stream.of(null, new LlmResponse(null));
     }
 
-    @Test
-    void returnsUnavailableWhenReserveAlsoFailsWithoutRetryingIt() {
+    @ParameterizedTest
+    @MethodSource("reserveFailures")
+    void returnsUnavailableWhenReserveAlsoFailsWithoutRetryingIt(RuntimeException failure, String outcome) {
         when(primary.generate(request)).thenThrow(new TemporaryLlmException("Основной недоступен"));
-        when(reserve.generate(request)).thenThrow(new TemporaryLlmException("Резерв недоступен"));
+        when(reserve.generate(request)).thenThrow(failure);
         assertThrows(ClassificationUnavailableException.class, () -> gateway().generate(request));
         verify(primary, times(2)).generate(request);
         verify(reserve).generate(request);
-        assertEquals(1, calls("internal", "temporary_error"));
+        assertEquals(1, calls("internal", outcome));
         assertEquals(1, fallbacks());
+    }
+
+    static Stream<Arguments> reserveFailures() {
+        return Stream.of(
+                Arguments.of(new TemporaryLlmException("Временный сбой резерва"), "temporary_error"),
+                Arguments.of(new PermanentLlmException("Постоянный сбой резерва"), "permanent_error"),
+                Arguments.of(new InvalidLlmResponseException("Некорректный ответ резерва"), "invalid_response")
+        );
     }
 
     @Test
@@ -141,15 +152,25 @@ class AiGatewayTest {
         assertEquals(1, calls("internal", "invalid_response"));
     }
 
-    @Test
-    void doesNotHideProgrammingErrorBehindFallback() {
+    @ParameterizedTest
+    @ValueSource(booleans = {false, true})
+    void doesNotHideProgrammingErrorBehindFallback(boolean inFallback) {
         var bug = new IllegalStateException("Ошибка реализации");
-        when(primary.generate(request)).thenThrow(bug);
+        if (inFallback) {
+            when(primary.generate(request)).thenThrow(new PermanentLlmException("Основной недоступен"));
+            when(reserve.generate(request)).thenThrow(bug);
+        } else {
+            when(primary.generate(request)).thenThrow(bug);
+        }
         assertSame(bug, assertThrows(IllegalStateException.class, () -> gateway().generate(request)));
         verify(primary).generate(request);
-        verify(reserve, never()).generate(any());
-        assertEquals(1, calls("openai", "unexpected_error"));
-        assertEquals(0, fallbacks());
+        if (inFallback) {
+            verify(reserve).generate(request);
+        } else {
+            verify(reserve, never()).generate(any());
+        }
+        assertEquals(1, calls(inFallback ? "internal" : "openai", "unexpected_error"));
+        assertEquals(inFallback ? 1 : 0, fallbacks());
     }
 
     @ParameterizedTest
