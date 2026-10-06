@@ -1,0 +1,448 @@
+{
+  "verified_at": "2026-11-17T15:38:01.4696153+03:00",
+  "source_commit": "c301eb8eabc4cb30bb86960c2c62fae5d10e89a2",
+  "build_command": "mvn -B -ntp clean package",
+  "build_result": "BUILD SUCCESS",
+  "build_completed_at": "2026-11-17T14:52:13+03:00",
+  "tests": [
+    {
+      "name": "ru.ivanov.workshop.client.ClassificationClientTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "ru.ivanov.workshop.config.LlmConfigurationTest",
+      "tests": 13,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "ru.ivanov.workshop.controller.AppealControllerTest",
+      "tests": 24,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "ru.ivanov.workshop.dto.ApiJsonContractTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "ru.ivanov.workshop.dto.ClassifyAppealRequestTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "ru.ivanov.workshop.llm.AiGatewayTest",
+      "tests": 27,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "ru.ivanov.workshop.llm.LlmEmulationTest",
+      "tests": 30,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "ru.ivanov.workshop.service.AppealClassificationServiceTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "http_checks": [
+    {
+      "provider": "openai",
+      "check": "health",
+      "status": 200,
+      "passed": true,
+      "response": "{\"status\":\"UP\"}"
+    },
+    {
+      "provider": "openai",
+      "check": "category CREDITS кредит",
+      "status": 200,
+      "passed": true,
+      "response": "{\"category\":\"CREDITS\"}"
+    },
+    {
+      "provider": "openai",
+      "check": "category CARDS карта",
+      "status": 200,
+      "passed": true,
+      "response": "{\"category\":\"CARDS\"}"
+    },
+    {
+      "provider": "openai",
+      "check": "category TRANSFERS перевод",
+      "status": 200,
+      "passed": true,
+      "response": "{\"category\":\"TRANSFERS\"}"
+    },
+    {
+      "provider": "openai",
+      "check": "category OTHER погода",
+      "status": 200,
+      "passed": true,
+      "response": "{\"category\":\"OTHER\"}"
+    },
+    {
+      "provider": "openai",
+      "check": "category OTHER карта перевод",
+      "status": 200,
+      "passed": true,
+      "response": "{\"category\":\"OTHER\"}"
+    },
+    {
+      "provider": "openai",
+      "check": "category OTHER Картина",
+      "status": 200,
+      "passed": true,
+      "response": "{\"category\":\"OTHER\"}"
+    },
+    {
+      "provider": "openai",
+      "check": "category CREDITS ипотека",
+      "status": 200,
+      "passed": true,
+      "response": "{\"category\":\"CREDITS\"}"
+    },
+    {
+      "provider": "openai",
+      "check": "category CARDS PRIVATE_CHECK_7289 карта",
+      "status": 200,
+      "passed": true,
+      "response": "{\"category\":\"CARDS\"}"
+    },
+    {
+      "provider": "openai",
+      "check": "invalid input 1",
+      "status": 400,
+      "passed": true,
+      "response": "{\"code\":\"INVALID_REQUEST\",\"message\":\"Текст обращения должен содержать от 1 до 2000 символов\"}"
+    },
+    {
+      "provider": "openai",
+      "check": "invalid input 2",
+      "status": 400,
+      "passed": true,
+      "response": "{\"code\":\"INVALID_REQUEST\",\"message\":\"Текст обращения должен содержать от 1 до 2000 символов\"}"
+    },
+    {
+      "provider": "openai",
+      "check": "invalid input 3",
+      "status": 400,
+      "passed": true,
+      "response": "{\"code\":\"INVALID_REQUEST\",\"message\":\"Текст обращения должен содержать от 1 до 2000 символов\"}"
+    },
+    {
+      "provider": "openai",
+      "check": "invalid input 4",
+      "status": 400,
+      "passed": true,
+      "response": "{\"code\":\"INVALID_REQUEST\",\"message\":\"Текст обращения должен содержать от 1 до 2000 символов\"}"
+    },
+    {
+      "provider": "openai",
+      "check": "invalid input 5",
+      "status": 400,
+      "passed": true,
+      "response": "{\"code\":\"INVALID_REQUEST\",\"message\":\"Некорректный JSON запроса\"}"
+    },
+    {
+      "provider": "openai",
+      "check": "invalid input 6",
+      "status": 400,
+      "passed": true,
+      "response": "{\"code\":\"INVALID_REQUEST\",\"message\":\"Некорректный JSON запроса\"}"
+    },
+    {
+      "provider": "openai",
+      "check": "invalid input 7",
+      "status": 400,
+      "passed": true,
+      "response": "{\"code\":\"INVALID_REQUEST\",\"message\":\"Некорректный JSON запроса\"}"
+    },
+    {
+      "provider": "openai",
+      "check": "invalid input 8",
+      "status": 400,
+      "passed": true,
+      "response": "{\"code\":\"INVALID_REQUEST\",\"message\":\"Некорректный JSON запроса\"}"
+    },
+    {
+      "provider": "openai",
+      "check": "invalid input 9",
+      "status": 400,
+      "passed": true,
+      "response": "{\"code\":\"INVALID_REQUEST\",\"message\":\"Некорректный JSON запроса\"}"
+    },
+    {
+      "provider": "openai",
+      "check": "invalid input 10",
+      "status": 400,
+      "passed": true,
+      "response": "{\"code\":\"INVALID_REQUEST\",\"message\":\"Некорректный JSON запроса\"}"
+    },
+    {
+      "provider": "openai",
+      "check": "invalid input 11",
+      "status": 400,
+      "passed": true,
+      "response": "{\"code\":\"INVALID_REQUEST\",\"message\":\"Некорректный JSON запроса\"}"
+    },
+    {
+      "provider": "openai",
+      "check": "method",
+      "status": 405,
+      "passed": true,
+      "response": "{\"code\":\"METHOD_NOT_ALLOWED\",\"message\":\"HTTP-метод не поддерживается\"}"
+    },
+    {
+      "provider": "openai",
+      "check": "content type",
+      "status": 415,
+      "passed": true,
+      "response": "{\"code\":\"UNSUPPORTED_MEDIA_TYPE\",\"message\":\"Используйте Content-Type: application/json\"}"
+    },
+    {
+      "provider": "openai",
+      "check": "accept XML",
+      "status": 406,
+      "passed": true,
+      "response": "{\"code\":\"NOT_ACCEPTABLE\",\"message\":\"Ответ доступен только в формате JSON\"}"
+    },
+    {
+      "provider": "openai",
+      "check": "unknown route",
+      "status": 404,
+      "passed": true,
+      "response": "{\"code\":\"NOT_FOUND\",\"message\":\"Запрошенный адрес не найден\"}"
+    },
+    {
+      "provider": "openai",
+      "check": "llm.calls",
+      "status": 200,
+      "passed": true,
+      "response": "{\"name\":\"llm.calls\",\"measurements\":[{\"statistic\":\"COUNT\",\"value\":8.0}],\"availableTags\":[{\"tag\":\"provider\",\"values\":[\"openai\"]},{\"tag\":\"outcome\",\"values\":[\"success\"]}]}"
+    },
+    {
+      "provider": "openai",
+      "check": "llm.call.duration",
+      "status": 200,
+      "passed": true,
+      "response": "{\"name\":\"llm.call.duration\",\"baseUnit\":\"seconds\",\"measurements\":[{\"statistic\":\"COUNT\",\"value\":8.0},{\"statistic\":\"TOTAL_TIME\",\"value\":0.0024778},{\"statistic\":\"MAX\",\"value\":0.0012346}],\"availableTags\":[{\"tag\":\"provider\",\"values\":[\"openai\"]},{\"tag\":\"outcome\",\"values\":[\"success\"]}]}"
+    },
+    {
+      "provider": "openai",
+      "check": "llm.fallbacks",
+      "status": 200,
+      "passed": true,
+      "response": "{\"name\":\"llm.fallbacks\",\"measurements\":[{\"statistic\":\"COUNT\",\"value\":0.0}],\"availableTags\":[]}"
+    },
+    {
+      "provider": "internal",
+      "check": "health",
+      "status": 200,
+      "passed": true,
+      "response": "{\"status\":\"UP\"}"
+    },
+    {
+      "provider": "internal",
+      "check": "category CREDITS кредит",
+      "status": 200,
+      "passed": true,
+      "response": "{\"category\":\"CREDITS\"}"
+    },
+    {
+      "provider": "internal",
+      "check": "category CARDS карта",
+      "status": 200,
+      "passed": true,
+      "response": "{\"category\":\"CARDS\"}"
+    },
+    {
+      "provider": "internal",
+      "check": "category TRANSFERS перевод",
+      "status": 200,
+      "passed": true,
+      "response": "{\"category\":\"TRANSFERS\"}"
+    },
+    {
+      "provider": "internal",
+      "check": "category OTHER погода",
+      "status": 200,
+      "passed": true,
+      "response": "{\"category\":\"OTHER\"}"
+    },
+    {
+      "provider": "internal",
+      "check": "category OTHER карта перевод",
+      "status": 200,
+      "passed": true,
+      "response": "{\"category\":\"OTHER\"}"
+    },
+    {
+      "provider": "internal",
+      "check": "category OTHER Картина",
+      "status": 200,
+      "passed": true,
+      "response": "{\"category\":\"OTHER\"}"
+    },
+    {
+      "provider": "internal",
+      "check": "category OTHER ипотека",
+      "status": 200,
+      "passed": true,
+      "response": "{\"category\":\"OTHER\"}"
+    },
+    {
+      "provider": "internal",
+      "check": "category CARDS PRIVATE_CHECK_7289 карта",
+      "status": 200,
+      "passed": true,
+      "response": "{\"category\":\"CARDS\"}"
+    },
+    {
+      "provider": "internal",
+      "check": "invalid input 1",
+      "status": 400,
+      "passed": true,
+      "response": "{\"code\":\"INVALID_REQUEST\",\"message\":\"Текст обращения должен содержать от 1 до 2000 символов\"}"
+    },
+    {
+      "provider": "internal",
+      "check": "invalid input 2",
+      "status": 400,
+      "passed": true,
+      "response": "{\"code\":\"INVALID_REQUEST\",\"message\":\"Текст обращения должен содержать от 1 до 2000 символов\"}"
+    },
+    {
+      "provider": "internal",
+      "check": "invalid input 3",
+      "status": 400,
+      "passed": true,
+      "response": "{\"code\":\"INVALID_REQUEST\",\"message\":\"Текст обращения должен содержать от 1 до 2000 символов\"}"
+    },
+    {
+      "provider": "internal",
+      "check": "invalid input 4",
+      "status": 400,
+      "passed": true,
+      "response": "{\"code\":\"INVALID_REQUEST\",\"message\":\"Текст обращения должен содержать от 1 до 2000 символов\"}"
+    },
+    {
+      "provider": "internal",
+      "check": "invalid input 5",
+      "status": 400,
+      "passed": true,
+      "response": "{\"code\":\"INVALID_REQUEST\",\"message\":\"Некорректный JSON запроса\"}"
+    },
+    {
+      "provider": "internal",
+      "check": "invalid input 6",
+      "status": 400,
+      "passed": true,
+      "response": "{\"code\":\"INVALID_REQUEST\",\"message\":\"Некорректный JSON запроса\"}"
+    },
+    {
+      "provider": "internal",
+      "check": "invalid input 7",
+      "status": 400,
+      "passed": true,
+      "response": "{\"code\":\"INVALID_REQUEST\",\"message\":\"Некорректный JSON запроса\"}"
+    },
+    {
+      "provider": "internal",
+      "check": "invalid input 8",
+      "status": 400,
+      "passed": true,
+      "response": "{\"code\":\"INVALID_REQUEST\",\"message\":\"Некорректный JSON запроса\"}"
+    },
+    {
+      "provider": "internal",
+      "check": "invalid input 9",
+      "status": 400,
+      "passed": true,
+      "response": "{\"code\":\"INVALID_REQUEST\",\"message\":\"Некорректный JSON запроса\"}"
+    },
+    {
+      "provider": "internal",
+      "check": "invalid input 10",
+      "status": 400,
+      "passed": true,
+      "response": "{\"code\":\"INVALID_REQUEST\",\"message\":\"Некорректный JSON запроса\"}"
+    },
+    {
+      "provider": "internal",
+      "check": "invalid input 11",
+      "status": 400,
+      "passed": true,
+      "response": "{\"code\":\"INVALID_REQUEST\",\"message\":\"Некорректный JSON запроса\"}"
+    },
+    {
+      "provider": "internal",
+      "check": "method",
+      "status": 405,
+      "passed": true,
+      "response": "{\"code\":\"METHOD_NOT_ALLOWED\",\"message\":\"HTTP-метод не поддерживается\"}"
+    },
+    {
+      "provider": "internal",
+      "check": "content type",
+      "status": 415,
+      "passed": true,
+      "response": "{\"code\":\"UNSUPPORTED_MEDIA_TYPE\",\"message\":\"Используйте Content-Type: application/json\"}"
+    },
+    {
+      "provider": "internal",
+      "check": "accept XML",
+      "status": 406,
+      "passed": true,
+      "response": "{\"code\":\"NOT_ACCEPTABLE\",\"message\":\"Ответ доступен только в формате JSON\"}"
+    },
+    {
+      "provider": "internal",
+      "check": "unknown route",
+      "status": 404,
+      "passed": true,
+      "response": "{\"code\":\"NOT_FOUND\",\"message\":\"Запрошенный адрес не найден\"}"
+    },
+    {
+      "provider": "internal",
+      "check": "llm.calls",
+      "status": 200,
+      "passed": true,
+      "response": "{\"name\":\"llm.calls\",\"measurements\":[{\"statistic\":\"COUNT\",\"value\":8.0}],\"availableTags\":[{\"tag\":\"provider\",\"values\":[\"internal\"]},{\"tag\":\"outcome\",\"values\":[\"success\"]}]}"
+    },
+    {
+      "provider": "internal",
+      "check": "llm.call.duration",
+      "status": 200,
+      "passed": true,
+      "response": "{\"name\":\"llm.call.duration\",\"baseUnit\":\"seconds\",\"measurements\":[{\"statistic\":\"COUNT\",\"value\":8.0},{\"statistic\":\"TOTAL_TIME\",\"value\":0.0025626},{\"statistic\":\"MAX\",\"value\":0.0012164}],\"availableTags\":[{\"tag\":\"provider\",\"values\":[\"internal\"]},{\"tag\":\"outcome\",\"values\":[\"success\"]}]}"
+    },
+    {
+      "provider": "internal",
+      "check": "llm.fallbacks",
+      "status": 200,
+      "passed": true,
+      "response": "{\"name\":\"llm.fallbacks\",\"measurements\":[{\"statistic\":\"COUNT\",\"value\":0.0}],\"availableTags\":[]}"
+    }
+  ],
+  "http_check_count": 54,
+  "privacy": "Marker absent from application logs and metric responses for both providers",
+  "process_cleanup": "Both application processes stopped"
+}
